@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block extra_head %}
+<script>
+    $(document).ready(function(){
+        var lat = "{{ center_lat }}";
+        var lng = "{{ center_lng }}";
+        var center = new GLatLng(lat, lng);
+        var zoom_level = parseInt("{{ zoom_level }}");
+		var markers = [];
+		var marker = null;
+		var markerClusterer = null;
+		function initialize() {
+			if(GBrowserIsCompatible()) {
+			//alert("Hello world");
+			var map = new GMap2(document.getElementById('map_canvas'));
+		    map.setCenter(center, zoom_level);
+            map.addControl(new GLargeMapControl());
+            map.addControl(new GMapTypeControl());
+            var icon = new GIcon(G_DEFAULT_ICON);
+            icon.image = "http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png";
+            {% for event in events %}
+               var latlng = location("{{ event.target_health_center.center }}");
+               marker = new GMarker(latlng, {icon:icon});
+               markers.push(marker);
+            {% endfor %}
+            //refreshMap();
+			markerClusterer = new MarkerClusterer(map, markers);
+			alert("Total count of reported events is " + markers.length);			
+           }
+        };
+		function refreshMap() {
+			if (markerClusterer != null) {
+               markerClusterer.clearMarkers();
+          	}
+         	markerClusterer = new MarkerClusterer(map, markers);
+			alert("clusters added");
+        };
+		
+		function location(latlng){
+			return new GLatLng(latlng.split(",")[0], latlng.split(",")[1]);
+		};
+	
+		function addMarker(location) {
+		  marker = new google.maps.Marker({
+			position: location,
+			map: map
+		  });
+		  markersArray.push(marker);
+		}
+		initialize();
+   });
+</script>
+{% endblock %}
+{% block content %}<h2>All Reports</h2>
+<p>
+    <div id="map_canvas" class="location_picker_map" style="width:700px; height:500px;">
+    </div>
+</p>
+{% endblock %}

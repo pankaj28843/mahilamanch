@@ -1,0 +1,3 @@
+{% for block in block_list %}
+<option value="{{ block.id }}">{{ block.name }}</option>
+{% endfor %}

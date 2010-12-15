@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Add District{% endblock %}
+{% block extra_head %}
+<script type="text/javascript">
+    $(document).unload(function(){
+        GUnload();
+    });
+    
+    $(document).ready(function(){
+        $("<div id=\"map_canvas\" class=\"location_picker_map\"></div>").insertBefore($("input.location_picker"));
+        //$("input.location_picker").css("display", "none")
+        var lat = "{{ center_lat }}";
+        var lng = "{{ center_lng }}";
+        var center = new google.maps.LatLng(lat, lng);
+        var zoom_level = parseInt("{{ zoom_level }}");
+        var mapOptions = {
+            zoom: zoom_level,
+            center: center,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+        
+        var marker = new google.maps.Marker({
+            position: center,
+            map: map,
+            draggable: true,
+            animation: google.maps.Animation.DROP,
+            title: ""
+        });
+        google.maps.event.addListener(map, 'click', function(event){
+            updateMarker(event.latLng);
+        });
+        google.maps.event.addListener(marker, 'dragend', markerDragged);
+        google.maps.event.addListener(marker, 'click', toggleBounce);
+        
+        function updateMarker(location){
+            marker.setPosition(location);
+            $("#id_center").attr("value", marker.getPosition().lat() + ',' + marker.getPosition().lng());
+            //map.setCenter(location);
+        }
+        
+        function toggleBounce(){
+            if (marker.getAnimation() != null) {
+                marker.setAnimation(null);
+            }
+            else {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+            }
+        };
+        
+        function markerDragged(){
+            //alert("was called" + marker.getPosition());
+            $("#id_center").attr("value", marker.getPosition().lat() + ',' + marker.getPosition().lng());
+            //map.setCenter(marker.getPosition(), zoom_level + 1);
+        }
+    });
+</script>
+{% endblock %}
+{% block content %}<h2>Add District</h2>
+<p>
+    <form method="post" action="">
+        <table>
+            {{ form.as_table }}
+            <tr style="padding-left:100;">
+                <td>
+                    <input type="submit" value="Submit"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</p>{% endblock %}

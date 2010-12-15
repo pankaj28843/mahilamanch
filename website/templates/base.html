@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="language" content="en-US" />
+        <meta name="google-site-verification" content="K2YTmjZU3mf7Rgtuk5ny7vxHJYgAvzcFTvoepE9LBjM" />
+        <meta name="keywords" content="{% block meta-keywords %}{% endblock %}" />
+        <meta name="description" content="{% block meta-description %}{% endblock %}" />
+        <title>Mahila Manch - {% block title %}Welcome{% endblock %}</title>
+        <link rel="shortcut icon" type="image/x-icon" href="/media/img/favicon.ico">
+        <link rel="stylesheet" type="text/css" href="/media/css/style.css" media="screen" />
+        <script src="/media/js/jquery-1.4.1.min.js" type="text/javascript">
+        </script>
+        <link href="/media/css/location_picker.css" type="text/css" media="all" rel="stylesheet" />
+        <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAINBqWrrDmXZpcRTJ3DoONRT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRWV_5ouDUkkS-1efj9tXiBZJqrjw&sensor=false" type="text/javascript"></script>
+		<script src="/media/js/markerclusterer.js" type="text/javascript">
+        </script>
+        {% block extra_head %}{% endblock %}
+    </head>
+    <body>
+        <div id="wrap">
+            <div id="header">
+                <h1><a href="#">Mahila Manch</a></h1>
+                <h2>... women health</h2>
+            </div>
+            <div id="menu">
+                <ul>
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        <a href="/contact/">Contact Us</a>
+                    </li>
+                    <li>
+                        <a href="/how-to-help/">How to Help</a>
+                    </li>
+                    <li>
+                        <a href="/about/">About Us</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="content">
+                <div class="left">
+                    {% block content %}{% endblock %}
+                </div>
+                <div class="right">
+                    {% block sidebar %}<h2 style="margin-bottom:-10px;">Add New</h2>
+                    <ul style="margin-left:10px;">
+                        <li>
+                            <a href="/add/district/">District</a>
+                        </li>
+                        <li>
+                            <a href="/add/block/">Block</a>
+                        </li>
+                        <li>
+                            <a href="/add/health-center/">Health Center</a>
+                        </li>                        
+                        <li>
+                            <a href="/add/event/">Events</a>
+                        </li>
+                    </ul>
+                    <h2 style="margin-bottom:-10px;">Edit</h2>
+                    <ul style="margin-left:10px;">
+                        <li>
+                            <a href="/edit/district/">Districts</a>
+                        </li>
+                        <li>
+                            <a href="/edit/block/">Blocks</a>
+                        </li>
+                        <li>
+                            <a href="/edit/health-center/">Health Centers</a>
+                        </li>
+                        <li>
+                            <a href="/edit/event/">Events</a>
+                        </li>
+                    </ul>
+                    {% endblock %}
+                </div>
+                <div style="clear: both;">
+                </div>
+            </div>
+            <div id="footer">
+                {% block footer %}
+                <p>
+                    Copyright &copy; {% now "Y" %} Pankaj Singh. All rights reserved.
+                    <br>
+                    <a href="/admin/" target="_blank">Site Adminstration</a>
+                    | <a href="/sitemap.xml" target="_blank">Sitemap</a>
+                </p>
+                {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>
