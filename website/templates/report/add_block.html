@@ -11,48 +11,23 @@
         //$("input.location_picker").css("display", "none")
         var lat = "{{ center_lat }}";
         var lng = "{{ center_lng }}";
-        var center = new google.maps.LatLng(lat, lng);
+        var center = new GLatLng(lat, lng);
         var zoom_level = parseInt("{{ zoom_level }}");
-        var mapOptions = {
-            zoom: zoom_level,
-            center: center,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
-        var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+        var map = new GMap2(document.getElementById("map_canvas"));
+		map.setCenter(center, zoom_level);
+        map.addControl(new GLargeMapControl());
+        map.addControl(new GMapTypeControl());
         
-        var marker = new google.maps.Marker({
-            position: center,
-            map: map,
-            draggable: true,
-            animation: google.maps.Animation.DROP,
-            title: ""
+        var marker = new GMarker(center, {draggable: true});
+		map.addOverlay(marker);
+        GEvent.addListener(marker, 'dragend', function(){
+            $("#id_center").attr("value", marker.getLatLng().lat() + ',' + marker.getLatLng().lng());
         });
-        google.maps.event.addListener(map, 'click', function(event){
-            updateMarker(event.latLng);
-        });
-        google.maps.event.addListener(marker, 'dragend', markerDragged);
-        google.maps.event.addListener(marker, 'click', toggleBounce);
-        
         function updateMarker(location){
-            marker.setPosition(location);
-            $("#id_center").attr("value", marker.getPosition().lat() + ',' + marker.getPosition().lng());
-            //map.setCenter(location);
-        }
-        
-        function toggleBounce(){
-            if (marker.getAnimation() != null) {
-                marker.setAnimation(null);
-            }
-            else {
-                marker.setAnimation(google.maps.Animation.BOUNCE);
-            }
-        };
-        
-        function markerDragged(){
-            //alert("was called" + marker.getPosition());
-            $("#id_center").attr("value", marker.getPosition().lat() + ',' + marker.getPosition().lng());
-            //map.setCenter(marker.getPosition(), zoom_level + 1);
-        }
+            marker.setLatLng(location);
+            $("#id_center").attr("value", marker.getLatLng().lat() + ',' + marker.getLatLng().lng());
+            map.setCenter(location);
+        }    
         
         $("#id_district").change(function(){
             filterBlocks($("#id_district").val());
@@ -62,10 +37,9 @@
             $.get("/feeds/district-center/" + $("#id_district :selected").text() + "/", function(data){
                 map.setCenter(new google.maps.LatLng(data.split(",")[0], data.split(",")[1]));
                 map.setZoom(zoom_level + 4);
-                updateMarker(new google.maps.LatLng(map.getCenter().lat(), map.getCenter().lng()));
+                updateMarker(new GLatLng(map.getCenter().lat(), map.getCenter().lng()));
             });
-        };
-        
+        };        
         });
 </script>
 {% endblock %}

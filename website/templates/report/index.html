@@ -19,35 +19,13 @@
             map.addControl(new GMapTypeControl());
             var icon = new GIcon(G_DEFAULT_ICON);
             icon.image = "http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png";
-            {% for event in events %}
-               var latlng = location("{{ event.target_health_center.center }}");
-               marker = new GMarker(latlng, {icon:icon});
-               markers.push(marker);
-            {% endfor %}
-            //refreshMap();
-			markerClusterer = new MarkerClusterer(map, markers);
-			alert("Total count of reported events is " + markers.length);			
+            {% for event in events %}var latlng = location("{{ event.target_health_center.center }}");marker = new GMarker(latlng, {icon:icon});markers.push(marker);{% endfor %}
+			markerClusterer = new MarkerClusterer(map, markers);			
            }
-        };
-		function refreshMap() {
-			if (markerClusterer != null) {
-               markerClusterer.clearMarkers();
-          	}
-         	markerClusterer = new MarkerClusterer(map, markers);
-			alert("clusters added");
-        };
-		
+        };		
 		function location(latlng){
 			return new GLatLng(latlng.split(",")[0], latlng.split(",")[1]);
 		};
-	
-		function addMarker(location) {
-		  marker = new google.maps.Marker({
-			position: location,
-			map: map
-		  });
-		  markersArray.push(marker);
-		}
 		initialize();
    });
 </script>

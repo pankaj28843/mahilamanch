@@ -5,7 +5,7 @@ import time
 
 def __main__():
     for i in range(20):
-        d = District(name = ''.join(random.choice(string.ascii_uppercase) for x in range(6)), center = str(26.79644 - 9*random.random()) + "," + str(82.198639 - 9*random.random()))
+        d = District(name = ''.join(random.choice(string.ascii_uppercase) for x in range(6)), center = str(26.79644 - 2*random.random()) + "," + str(82.198639 - 9*random.random()))
         d.save()
 
     d_list = District.objects.all()
@@ -21,7 +21,7 @@ def __main__():
         b_list = Block.objects.all()
         b = b_list[random.randint(0,len(b_list)-1)]
         s = b.center.split(",")
-        hc = HealthCenter(name = ''.join(random.choice(string.ascii_uppercase) for x in range(6)), center = str(string.atof(s[0]) + 0.09*random.random()) + "," + str(string.atof(s[1]) + 0.09*random.random()), district = d, block = b, code = 1000+i)
+        hc = HealthCenter(name = ''.join(random.choice(string.ascii_uppercase) for x in range(6)), center = str(string.atof(s[0]) + 0.2*random.random()) + "," + str(string.atof(s[1]) + 0.2*random.random()), district = d, block = b, code = 1000+i)
         hc.save()
 
     for i in range(1000):
