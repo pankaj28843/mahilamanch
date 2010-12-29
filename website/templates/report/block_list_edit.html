@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}Edit Districts{% endblock %}
+{% block content %}<h2>Select a block to edit or delete</h2>
+<p>
+	{% for b in blocks %}
+    <span style="margin-left:50px;">{{ b.name }}</span><span style="float:right;margin-right:200px;"><a href="/edit/block/{{ b.name }}/">Edit</a><a href="/delete/block/{{ b.name }}/"  style="margin-left:50px;">Delete</a></span><br />
+    {% endfor %}
+</p>{% endblock %}

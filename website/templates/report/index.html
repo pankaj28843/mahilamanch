@@ -8,31 +8,89 @@
         var center = new GLatLng(lat, lng);
         var zoom_level = parseInt("{{ zoom_level }}");
 		var markers = [];
+        var events = [];
+        var filtered_events = [];
+        var map = null;
 		var marker = null;
 		var markerClusterer = null;
 		function initialize() {
 			if(GBrowserIsCompatible()) {
-			//alert("Hello world");
-			var map = new GMap2(document.getElementById('map_canvas'));
+			map = new GMap2(document.getElementById('map_canvas'));
 		    map.setCenter(center, zoom_level);
             map.addControl(new GLargeMapControl());
             map.addControl(new GMapTypeControl());
             var icon = new GIcon(G_DEFAULT_ICON);
             icon.image = "http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png";
-            {% for event in events %}var latlng = location("{{ event.target_health_center.center }}");marker = new GMarker(latlng, {icon:icon});markers.push(marker);{% endfor %}
+            {% for event in events %}
+            var latlng = location("{{ event.target_health_center.center }}");
+            marker = new GMarker(latlng, {icon:icon});
+            markers.push(marker);
+            var e = new Event(latlng = location("{{ event.target_health_center.center }}"), date = "{{ event.date }}", time = "{{ event.time }}", money = "{{ event.money }}", category = "{{ event.category }}");
+            events.push(e);
+            {% endfor %}
+            filtered_events = events;
 			markerClusterer = new MarkerClusterer(map, markers);			
            }
         };		
 		function location(latlng){
 			return new GLatLng(latlng.split(",")[0], latlng.split(",")[1]);
 		};
+        function Event(location, date, time, money, category){
+            this.latlng = location;
+            this.date = date;
+            this.time = time;
+            this.money = money;
+            this.category = category;
+        };
 		initialize();
+        $("#category_filter > ul> li> a").bind('click', function(e){
+            var icon = new GIcon(G_DEFAULT_ICON);
+            icon.image = "http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png";
+            filtered_events = [];
+            markers = [];
+            if($(this).attr('cat') == -1){
+                for (var i=0; i < events.length; i++){
+                    filtered_events.push(events[i]);
+                    markers.push(new GMarker(events[i].latlng, {icon:icon}));
+                }
+            }
+            else {
+                for (var i=0; i < events.length; i++){
+                    if(events[i].category == $(this).attr('cat')){
+                        filtered_events.push(events[i]);
+                        markers.push(new GMarker(events[i].latlng, {icon:icon}));
+                    }
+                }
+            }
+            if (markerClusterer != null) {
+                markerClusterer.clearMarkers();
+            }
+            markerClusterer = new MarkerClusterer(map, markers);
+        });
    });
 </script>
 {% endblock %}
 {% block content %}<h2>All Reports</h2>
 <p>
     <div id="map_canvas" class="location_picker_map" style="width:700px; height:500px;">
+    </div>
+    <div id="category_filter">
+        <h2>Filter by Categories</h2>
+        <ul>
+            <li><a href="#All" cat="-1">All</a></li>
+            <li><a href="#Category1" cat="1">Category 1 </a></li>
+            <li><a href="#Category2" cat="2">Category 2 </a></li>
+            <li><a href="#Category3" cat="3">Category 3 </a></li>
+        </ul>
+    </div>
+    <div id="timeline">
+        <h2></h2>
+    </div>
+    <div id="timeline">
+        <h2>Excel Reports</h2>
+        <ul>
+            <li><a href="/report/">All events reported</a></li>
+        </ul>
     </div>
 </p>
 {% endblock %}

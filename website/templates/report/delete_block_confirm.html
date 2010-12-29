@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Delete Block{% endblock %}
+{% block content %}<h2>Delete block {{ block }}</h2>
+<p>
+    <form method="POST" action="">
+    <p style="color:red">This will delete all health centers associated with block {{ block }}. If you are sure to delete block {{ block }} then press delete otherwsie click on cancel?</p>
+        <input type="hidden" name="__confirm__" value="1" />
+        <input type="submit" value="Delete"/>
+        <a href="/edit/block/" style="color:green">Cancel</a>
+    </form>
+</p>{% endblock %}

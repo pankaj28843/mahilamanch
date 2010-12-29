@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Delete Health Center{% endblock %}
+{% block content %}<h2>Delete Health Center {{ health_center }}</h2>
+<p>
+    <form method="POST" action="">
+    <p style="color:red">This will delete all reports associated with health center {{ health_center }}. If you are sure to delete health center {{ health_center }} then press delete otherwsie click on cancel?</p>
+        <input type="hidden" name="__confirm__" value="1" />
+        <input type="submit" value="Delete"/>
+        <a href="/edit/health-center/" style="color:green">Cancel</a>
+    </form>
+</p>{% endblock %}

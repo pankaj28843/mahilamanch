@@ -29,14 +29,23 @@
                         <a href="/">Home</a>
                     </li>
                     <li>
+                        <a href="/about/">About the Project</a>
+                    </li>
+                    <li>
                         <a href="/contact/">Contact Us</a>
                     </li>
+                    {% if user.is_active %}
                     <li>
-                        <a href="/how-to-help/">How to Help</a>
+                        <a href="/accounts/logout/">Logout</a>
                     </li>
+                    {% else %}                    
                     <li>
-                        <a href="/about/">About Us</a>
+                        <a href="/accounts/login/">Login</a>
                     </li>
+					{% endif %}
+                    <li>
+                        <a href="/blog/">Blog</a>
+                    </li>                  
                 </ul>
             </div>
             <div id="content">
@@ -44,7 +53,8 @@
                     {% block content %}{% endblock %}
                 </div>
                 <div class="right">
-                    {% block sidebar %}<h2 style="margin-bottom:-10px;">Add New</h2>
+                	{% if user.is_authenticated %}
+                    <h2 style="margin-bottom:-10px;">Add New</h2>
                     <ul style="margin-left:10px;">
                         <li>
                             <a href="/add/district/">District</a>
@@ -54,9 +64,6 @@
                         </li>
                         <li>
                             <a href="/add/health-center/">Health Center</a>
-                        </li>                        
-                        <li>
-                            <a href="/add/event/">Events</a>
                         </li>
                     </ul>
                     <h2 style="margin-bottom:-10px;">Edit</h2>
@@ -70,10 +77,9 @@
                         <li>
                             <a href="/edit/health-center/">Health Centers</a>
                         </li>
-                        <li>
-                            <a href="/edit/event/">Events</a>
-                        </li>
                     </ul>
+                    {% endif %}
+                    {% block sidebar %}
                     {% endblock %}
                 </div>
                 <div style="clear: both;">
@@ -82,7 +88,7 @@
             <div id="footer">
                 {% block footer %}
                 <p>
-                    Copyright &copy; {% now "Y" %} Pankaj Singh. All rights reserved.
+                    Copyright &copy; {% now "Y" %} Sahyog India. All rights reserved.
                     <br>
                     <a href="/admin/" target="_blank">Site Adminstration</a>
                     | <a href="/sitemap.xml" target="_blank">Sitemap</a>
