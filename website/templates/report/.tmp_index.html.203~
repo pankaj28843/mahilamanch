@@ -30,7 +30,7 @@
                 var latlng = location("{{ event.target_health_center.center }}");
                 marker = new GMarker(latlng, {icon:icon});
                 markers.push(marker);
-                var e = new Event(latlng = location("{{ event.target_health_center.center }}"), date = "{{ event.reporting_date }}", time = "{{ event.reporting_time }}", money = "{{ event.money }}", category = "{{ event.category }}");
+                var e = new Event(latlng = location("{{ event.target_health_center.center }}"), date = "{{ event.date }}", time = "{{ event.time }}", money = "{{ event.money }}", category = "{{ event.category }}");
                 events.push(e);
                 {% endfor %}
                 filtered_events = events;
@@ -40,34 +40,9 @@
     		function location(latlng){
     			return new GLatLng(latlng.split(",")[0], latlng.split(",")[1]);
     		};
-			
-			var month_names = new Array("Jan", "Feb", "Mar", 
-			"Apr", "May", "Jun", "Jul", "Aug", "Sep", 
-			"Oct", "Nov", "Dec");
-			function formatDjangoDate(date){
-				d = new Date();
-				d.setMonth(findIndex(date.slice(0,3),month_names));
-				d.setYear(parseInt(date.slice(date.length-5, date.length)));
-				d.setDate(parseInt(date.slice(5,date.length-6)));
-				return d;
-			}
-			function findIndex(item, arr) {
-				// find index position of {item}
-				// in Array {arr} - return -1, if 
-				// item not found 
-				var idx;
-				var last = arr.length;
-				for (var i = 0; i < last; i++) {
-					idx = (item == arr[i])?i:-1;
-					// quit on first "found"
-					if (-1 != idx)
-						break;
-				}
-				return idx;
-			}
             function Event(location, date, time, money, category){
                 this.latlng = location;
-                this.date = formatDjangoDate(date);
+                this.date = date;
                 this.time = time;
                 this.money = money;
                 this.category = category;
@@ -97,55 +72,7 @@
                 }
                 markerClusterer = new MarkerClusterer(map, markers);
             });
-			
-			var startDate = new Date();
-			startDate.setDate(1);
-			startDate.setMonth(0);
-			startDate.setYear(2011);
-			
-			var endDate = new Date();
-			endDate.setDate(31);
-			endDate.setMonth(2);
-			endDate.setYear(2011);
-			
-			var startTime = startDate.getTime(), endTime = endDate.getTime();
-			var options_html = "";
-			for(loopTime = startTime + 86400000; loopTime < endTime; loopTime += 86400000){
-				var d = new Date();
-				d.setTime(loopTime);
-				dateFormat(date = d);
-				options_html += "<option value = \""+formatted_date+"\">"+formatted_date+"</option>" ;
-			}
-			//alert(events[0].date);
-			
-			$('select#startDate').html("<option value = \""+dateFormat(startDate)+"\" selected=\"selected\">"+dateFormat(startDate)+"</option>" + options_html + "<option value = \""+dateFormat(endDate)+"\">"+dateFormat(endDate)+"</option>");
-			$('select#endDate').html("<option value = \""+dateFormat(startDate)+"\">"+dateFormat(startDate)+"</option>" + options_html + "<option value = \""+dateFormat(endDate)+"\" selected=\"selected\">"+dateFormat(endDate)+"</option>");
 			$('select#startDate, select#endDate').selectToUISlider();
-			
-			function dateFormat(date){
-				var curr_date = date.getDate();
-				var curr_month = date.getMonth();
-				var curr_year = date.getFullYear();
-				formatted_date = month_names[curr_month] + ". " + curr_date + ", " + curr_year;
-				return formatted_date;
-			}
-			$("#startDate, #endDate").change(function(){
-				//alert("time filter value changed");
-				var icon = new GIcon(G_DEFAULT_ICON);
-                icon.image = "http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png";
-                filtered_events = [];
-                markers = [];
-                for (var i=0; i < events.length; i++){
-                	if(events[i].date >= formatDjangoDate($("#startDate")).val() && events[i].date <= formatDjangoDate($("#endDate").val())){
-                        filtered_events.push(events[i]);
-                        markers.push(new GMarker(events[i].latlng, {icon:icon}));
-                    }
-                }
-                if (markerClusterer != null) {
-                    markerClusterer.clearMarkers();
-                }
-                markerClusterer = new MarkerClusterer(map, markers);
-			}).change();
        });
 </script>
 {% endblock %}
@@ -171,22 +98,37 @@
         </ul>
     </div>
     <div id="timeline">
-        <h2>Timeline of Events</h2>
-	    <div class="slider-holder">
-	        <form action="">
-	                <label for="startDate">
-	                    From:
-	                </label>
-	                <select name="startDate" id="startDate">
-	                </select>
-	                <label for="endDate">
-	                    To:
-	                </label>
-	                <select name="endDate" id="endDate">
-	                </select>
-	        </form>
-	    </div>
-	</div>
+        <h2></h2>
+    </div>
+    <div class="cat-filters clearingfix" style="margin-top:20px;">
+        <strong>Timeline of Events</strong>
+    </div>
+    <div class="slider-holder">
+        <form action="">
+            <input type="hidden" value="0" name="currentCat" id="currentCat">
+            <fieldset>
+                <div class="play">
+                    <a href="#" id="playTimeline">PLAY</a>
+                </div>
+                <label for="startDate">
+                    From:
+                </label>
+                <select name="startDate" id="startDate">
+                    <optgroup label="2010">
+                    	<option value="1263272400" selected="selected" >Jan 12 2010</option><option value="1263358800">Jan 13 2010</option><option value="1263445200">Jan 14 2010</option><option value="1263531600">Jan 15 2010</option><option value="1263618000">Jan 16 2010</option><option value="1263704400">Jan 17 2010</option><option value="1263790800">Jan 18 2010</option><option value="1263877200">Jan 19 2010</option><option value="1263963600">Jan 20 2010</option><option value="1264050000">Jan 21 2010</option><option value="1264136400">Jan 22 2010</option><option value="1264222800">Jan 23 2010</option><option value="1264309200">Jan 24 2010</option><option value="1264395600">Jan 25 2010</option><option value="1264482000">Jan 26 2010</option><option value="1264568400">Jan 27 2010</option><option value="1264654800">Jan 28 2010</option><option value="1264741200">Jan 29 2010</option><option value="1264827600">Jan 30 2010</option><option value="1264914000">Jan 31 2010</option>
+                    </optgroup>
+                </select>
+                <label for="endDate">
+                    To:
+                </label>
+                <select name="endDate" id="endDate">
+                    <optgroup label="2010">
+                    	<option value="1263272400">Jan 12 2010</option><option value="1263358800">Jan 13 2010</option><option value="1263445200">Jan 14 2010</option><option value="1263531600">Jan 15 2010</option><option value="1263618000">Jan 16 2010</option><option value="1263704400">Jan 17 2010</option><option value="1263790800">Jan 18 2010</option><option value="1263877200">Jan 19 2010</option><option value="1263963600">Jan 20 2010</option><option value="1264050000">Jan 21 2010</option><option value="1264136400">Jan 22 2010</option><option value="1264222800">Jan 23 2010</option><option value="1264309200">Jan 24 2010</option><option value="1264395600">Jan 25 2010</option><option value="1264482000">Jan 26 2010</option><option value="1264568400">Jan 27 2010</option><option value="1264654800">Jan 28 2010</option><option value="1264741200">Jan 29 2010</option><option value="1264827600">Jan 30 2010</option><option value="1264914000" selected="selected" >Jan 31 2010</option>
+                    </optgroup>
+                </select>
+            </fieldset>
+        </form>
+    </div>
     <div id="graph" class="graph-holder">
     </div>
 	<br><br><br><br>

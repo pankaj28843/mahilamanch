@@ -43,7 +43,7 @@ class Event(models.Model):
     (3, 'Category 3'),
     )
 
-    reporting_date = models.DateField("Date of reporting", auto_now=False, auto_now_add=True)
+    reporting_date = models.DateField("Date of reporting")
     reporting_time = models.TimeField("Time of reporting", auto_now=False, auto_now_add=True)
     district = models.ForeignKey(District)
     block = models.ForeignKey(Block)
