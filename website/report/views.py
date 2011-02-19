@@ -188,8 +188,11 @@ def delete_health_center(request, health_center_name):
     next_url = request.GET.get('next', '/edit/health-center/')
     return HttpResponseRedirect(next_url)
 
-def excelview(request):
-    objs = Event.objects.all()
+def excel_reports(request, category):
+    if category == '0':
+        objs = Event.objects.all().order_by("id")
+    else:
+        objs = Event.objects.all().filter(category = int(category)).order_by("id")
     data_list = [
         ["Date","Time", "Health Center", "Block", "District", "Category", "Amount"],
         ]

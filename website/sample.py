@@ -11,13 +11,13 @@ def __main__():
 
     d_list = District.objects.all()
 
-    for i in range(50):
+    for i in range(500):
         d = d_list[random.randint(0,len(d_list)-1)]
         s = d.center.split(",")
         b = Block(name = ''.join(random.choice(string.ascii_uppercase) for x in range(6)), center = str(string.atof(s[0]) + 0.9*random.random()) + "," + str(string.atof(s[1]) + 0.9*random.random()), district = d)
         b.save()
 
-    for i in range(500):
+    for i in range(5000):
         d = d_list[random.randint(0,len(d_list)-1)]
         b_list = Block.objects.all()
         b = b_list[random.randint(0,len(b_list)-1)]
@@ -25,11 +25,11 @@ def __main__():
         hc = HealthCenter(name = ''.join(random.choice(string.ascii_uppercase) for x in range(6)), center = str(string.atof(s[0]) + 0.2*random.random()) + "," + str(string.atof(s[1]) + 0.2*random.random()), district = d, block = b, code = 1000+i)
         hc.save()
     current_date = date.today()
-    end_date = date.today() + timedelta(days=30) 
+    end_date = date.today() + timedelta(days=60) 
 
     while current_date <= end_date:
         print current_date
-        for i in range(random.randint(1,20)):
+        for i in range(random.randint(1,50)):
             d = d_list[random.randint(0,len(d_list)-1)]    
             b_list = Block.objects.all()
             b = b_list[random.randint(0,len(b_list)-1)]    

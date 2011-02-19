@@ -3,7 +3,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('report.views',
     url(r'^$', 'index', name='index'),
-    url(r'^report/$', 'excelview', name='excelview'),
+    url(r'^excel-reports/(?P<category>.*)/$', 'excel_reports', name='excel_reports'),
     url(r'^add/district/$', 'add_district', name='add_district'),
     url(r'^add/block/$', 'add_block', name='add_block'),
     url(r'^add/health-center/$', 'add_health_center', name='add_health_center'),
